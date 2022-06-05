@@ -99,7 +99,7 @@ public class SodiumGameOptionsMixin
         Option<MagnesiumExtrasConfig.DarknessOption> totalDarknessSetting =  OptionImpl.createBuilder(MagnesiumExtrasConfig.DarknessOption.class, sodiumOpts)
                 .setName("True Darkness Mode")
                 .setTooltip("Controls how dark is considered true darkness.\n\u00A74THIS SETTING IS PERMANENTLY SET TO PITCH BLACK ON HHH LITE!")
-                .setControl((option) -> new CyclingControl<>(option, MagnesiumExtrasConfig.DarknessOption.class, new String[] { "Pitch Black" }))
+                .setControl((option) -> new CyclingControl<>(option, MagnesiumExtrasConfig.DarknessOption.class, new String[] { "Pitch Black", "Really Dark", "Dark", "Dim" }))
                 .setBinding(
                         (opts, value) -> { },
                         (opts) -> MagnesiumExtrasConfig.DarknessOption.PITCH_BLACK)
