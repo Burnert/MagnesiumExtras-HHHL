@@ -31,11 +31,7 @@ public class MixinTheEndDimension {
 
 	@Inject(method = "getBrightnessDependentFogColor", at = @At(value = "RETURN"), cancellable = true)
 	private void onAdjustSkyColor(CallbackInfoReturnable<Vector3d> ci) {
-		if (!MagnesiumExtrasConfig.trueDarknessEnabled.get())
-			return;
-
-		if (!MagnesiumExtrasConfig.darkEnd.get())
-			return;
+		// Always enabled
 
 		final double factor = Darkness.darkEndFog();
 

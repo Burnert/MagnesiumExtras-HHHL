@@ -42,8 +42,8 @@ public class Darkness
 	}
 
 	public static void bake() {
-		MagnesiumExtrasConfig.darkNetherFogEffective = MagnesiumExtrasConfig.darkNether.get() ? MagnesiumExtrasConfig.darkNetherFogConfigured.get() : 1.0;
-		MagnesiumExtrasConfig.darkEndFogEffective = MagnesiumExtrasConfig.darkEnd.get() ? MagnesiumExtrasConfig.darkEndFogConfigured.get() : 1.0;
+		MagnesiumExtrasConfig.darkNetherFogEffective = 0.0;
+		MagnesiumExtrasConfig.darkEndFogEffective = 0.5;
 	}
 
 	public static boolean blockLightOnly() {
@@ -69,21 +69,15 @@ public class Darkness
 	}
 
 	private static boolean isDark(World world) {
-		if (!MagnesiumExtrasConfig.trueDarknessEnabled.get())
-			return false;
-
 		final RegistryKey<World> dimType = world.dimension();
-		if (dimType == World.OVERWORLD) {
-			return MagnesiumExtrasConfig.darkOverworld.get();
-		} else if (dimType == World.NETHER) {
-			return MagnesiumExtrasConfig.darkNether.get();
-		} else if (dimType == World.END) {
-			return MagnesiumExtrasConfig.darkEnd.get();
-		} else if (world.dimensionType().hasSkyLight()) {
-			return MagnesiumExtrasConfig.darkDefault.get();
-		} else {
-			return MagnesiumExtrasConfig.darkSkyless.get();
+
+		if (dimType == World.OVERWORLD || dimType == World.NETHER || dimType == World.END) {
+			return true;
 		}
+		if (world.dimensionType().hasSkyLight()) {
+			return MagnesiumExtrasConfig.darkDefault.get();
+		}
+		return true;
 	}
 
 	private static float skyFactor(World world) {
@@ -93,7 +87,7 @@ public class Darkness
 				if (angle > 0.25f && angle < 0.75f) {
 					final float oldWeight = Math.max(0, (Math.abs(angle - 0.5f) - 0.2f)) * 20;
 					final float moon = MagnesiumExtrasConfig.ignoreMoonPhase.get() ? 0 : world.getMoonBrightness();
-					final float moonInterpolated = (float) MathHelper.lerp(moon, MagnesiumExtrasConfig.minimumMoonLevel.get(), MagnesiumExtrasConfig.maximumMoonLevel.get());
+					final float moonInterpolated = (float) MathHelper.lerp(moon, 0.0, MagnesiumExtrasConfig.MAXIMUM_MOON_LEVEL_FIXED);
 					return MathHelper.lerp(oldWeight * oldWeight * oldWeight, moonInterpolated, 1f) ;
 				} else {
 					return 1;
@@ -141,17 +135,22 @@ public class Darkness
 			final DimensionType dim = world.dimensionType();
 			final boolean blockAmbient = !Darkness.isDark(world);
 
+			// Make it not as dark in The End
+			float darknessValue = world.dimension() == World.END ?
+					MagnesiumExtrasConfig.DarknessOption.REALLY_DARK.value :
+					MagnesiumExtrasConfig.DarknessOption.PITCH_BLACK.value;
+
 			for (int skyIndex = 0; skyIndex < 16; ++skyIndex) {
 				float skyFactor = 1f - skyIndex / 15f;
 				skyFactor = 1 - skyFactor * skyFactor * skyFactor * skyFactor;
 				skyFactor *= dimSkyFactor;
 
-				float min = Math.max(skyFactor * 0.05f, MagnesiumExtrasConfig.darknessOption.get().value);
+				float min = Math.max(skyFactor * 0.05f, darknessValue);
 				final float rawAmbient = ambient * skyFactor;
 				final float minAmbient = rawAmbient * (1 - min) + min;
 				final float skyBase = dim.brightness(skyIndex) * minAmbient;
 
-				min = Math.max(0.35f * skyFactor, MagnesiumExtrasConfig.darknessOption.get().value);
+				min = Math.max(0.35f * skyFactor, darknessValue);
 				float v = skyBase * (rawAmbient * (1 - min) + min);
 				float skyRed = v;
 				float skyGreen = v;
@@ -216,7 +215,7 @@ public class Darkness
 					green = green * (1.0F - gamma) + invGreen * gamma;
 					blue = blue * (1.0F - gamma) + invBlue * gamma;
 
-					min = Math.max(0.03f * f, MagnesiumExtrasConfig.darknessOption.get().value);
+					min = Math.max(0.03f * f, darknessValue);
 					red = red * (0.99F - min) + min;
 					green = green * (0.99F - min) + min;
 					blue = blue * (0.99F - min) + min;

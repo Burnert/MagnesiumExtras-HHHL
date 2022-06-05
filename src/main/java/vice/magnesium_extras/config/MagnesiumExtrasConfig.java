@@ -45,20 +45,11 @@ public class MagnesiumExtrasConfig
     // Total Darkness
     public static double darkNetherFogEffective;
     public static double darkEndFogEffective;
-    public static ForgeConfigSpec.BooleanValue trueDarknessEnabled;
-    public static ForgeConfigSpec.EnumValue<DarknessOption> darknessOption;
+    public static final double MAXIMUM_MOON_LEVEL_FIXED = 0.15;
     //advanced
-    public static ForgeConfigSpec.DoubleValue darkNetherFogConfigured;
-    public static ForgeConfigSpec.BooleanValue darkEnd;
-    public static ForgeConfigSpec.DoubleValue darkEndFogConfigured;
-    public static ForgeConfigSpec.BooleanValue darkSkyless;
     public static ForgeConfigSpec.BooleanValue blockLightOnly;
     public static ForgeConfigSpec.BooleanValue ignoreMoonPhase;
-    public static ForgeConfigSpec.DoubleValue minimumMoonLevel;
-    public static ForgeConfigSpec.DoubleValue maximumMoonLevel;
-    public static ForgeConfigSpec.BooleanValue darkOverworld;
     public static ForgeConfigSpec.BooleanValue darkDefault;
-    public static ForgeConfigSpec.BooleanValue darkNether;
 
 
 
@@ -99,24 +90,13 @@ public class MagnesiumExtrasConfig
         });
 
         builder.Block("True Darkness", b -> {
-            trueDarknessEnabled = b.define("Use True Darkness", true);
-            darknessOption = b.defineEnum("Darkness Setting (PITCH_BLACK, REALLY_DARK, DARK, DIM)", DarknessOption.DARK);
-
             builder.Block("Advanced", b2 -> {
                 blockLightOnly = b2.define("Only Effect Block Lighting", false);
                 ignoreMoonPhase = b2.define("Ignore Moon Light", false);
-                minimumMoonLevel = b2.defineInRange("Minimum Moon Brightness (0->1)", 0, 0, 1d);
-                maximumMoonLevel = b2.defineInRange("Maximum Moon Brightness (0->1)", 0.25d, 0, 1d);
             });
 
             builder.Block("Dimension Settings", b2 -> {
-                darkOverworld = b2.define("Dark Overworld?", true);
                 darkDefault = b2.define("Dark By Default?", false);
-                darkNether = b2.define("Dark Nether?", false);
-                darkNetherFogConfigured = b2.defineInRange("Dark Nether Fog Brightness (0->1)", .5, 0, 1d);
-                darkEnd = b2.define("Dark End?", false);
-                darkEndFogConfigured = b.defineInRange("Dark End Fog Brightness (0->1)", 0, 0, 1d);
-                darkSkyless = b2.define("Dark If No Skylight?", false);
             });
         });
 

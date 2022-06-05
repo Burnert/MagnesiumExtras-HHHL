@@ -87,21 +87,23 @@ public class SodiumGameOptionsMixin
 
         OptionImpl<SodiumGameOptions, Boolean> totalDarkness = OptionImpl.createBuilder(Boolean.class, sodiumOpts)
                 .setName("True Darkness")
-                .setTooltip("Makes the rest of the world more realistically dark. Does not effect daytime or torch light.")
+                .setTooltip("Makes the rest of the world more realistically dark. Does not effect daytime or torch light.\n\u00A74THIS SETTING IS PERMANENTLY ACTIVE ON HHH LITE!")
                 .setControl(TickBoxControl::new)
+                .setEnabled(false)
                 .setBinding(
-                        (options, value) -> MagnesiumExtrasConfig.trueDarknessEnabled.set(value),
-                        (options) -> MagnesiumExtrasConfig.trueDarknessEnabled.get())
+                        (options, value) -> { },
+                        (options) -> true)
                 .setImpact(OptionImpact.LOW)
                 .build();
 
         Option<MagnesiumExtrasConfig.DarknessOption> totalDarknessSetting =  OptionImpl.createBuilder(MagnesiumExtrasConfig.DarknessOption.class, sodiumOpts)
                 .setName("True Darkness Mode")
-                .setTooltip("Controls how dark is considered true darkness.")
-                .setControl((option) -> new CyclingControl<>(option, MagnesiumExtrasConfig.DarknessOption.class, new String[] { "Pitch Black", "Really Dark", "Dark", "Dim"}))
+                .setTooltip("Controls how dark is considered true darkness.\n\u00A74THIS SETTING IS PERMANENTLY SET TO PITCH BLACK ON HHH LITE!")
+                .setControl((option) -> new CyclingControl<>(option, MagnesiumExtrasConfig.DarknessOption.class, new String[] { "Pitch Black" }))
                 .setBinding(
-                        (opts, value) -> MagnesiumExtrasConfig.darknessOption.set(value),
-                        (opts) -> MagnesiumExtrasConfig.darknessOption.get())
+                        (opts, value) -> { },
+                        (opts) -> MagnesiumExtrasConfig.DarknessOption.PITCH_BLACK)
+                .setEnabled(false)
                 .setImpact(OptionImpact.LOW)
                 .build();
 
